@@ -10,9 +10,9 @@ import time
 
 initf()
  
-fundo_menu()
+#fundo_menu()
 
 #p1()
-#p2()
+p2()
 
 fechamento()

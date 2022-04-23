@@ -244,7 +244,7 @@ def p2():
     activebackground=Cores.azul,
     
     activeforeground=Cores.branco,
-    command=lambda m="certa": resposta1(m),
+    command=lambda m="certa2": resposta1(m),
     relief=SUNKEN)
     
     res_3 = Button(janela,
@@ -275,7 +275,7 @@ def p2():
      ) 
 ############# PERGUNTA 3
 def p3():
-    pygame.mixer.music.stop()
+    
     pass
 
 def perguntaN1():
