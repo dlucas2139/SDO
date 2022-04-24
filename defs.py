@@ -2,6 +2,7 @@ from genericpath import exists
 from tkinter import *
 from tkinter import ttk
 from tkinter.tix import IMAGE
+from random import randint
 import os
 import pygame
 import time
@@ -10,6 +11,8 @@ i = -10
 j = 0
 btn_h = 3
 btn_w = 40
+n_pulos = 3
+m = ""
 class Cores():
     fundo = "#6d60ff"
     azul = "#1947e0"
@@ -25,6 +28,28 @@ class Cores():
     azul3 = "#800e21"
     pass
 
+def aleatorio():
+    titulo = False
+    #tempo()
+    texto_iniciar.destroy()
+    texto_opcoes.destroy() 
+    texto_sair.destroy() 
+    lb_fundo.destroy() 
+    pygame.mixer.music.stop()
+    janela['bg'] = "#FF0000"
+    #janela.after(2000,aa())
+    p1() #NÂO APAGAR
+    perg_aleatoria = randint(1,3)
+    if perg_aleatoria == 1: p1()
+    if perg_aleatoria == 2: p2()
+    if perg_aleatoria == 3: p3()
+    
+    
+        
+    pass
+    
+
+
 secs = 60
 def tempo():
     global secs
@@ -36,7 +61,7 @@ def tempo():
     contador.place(x=950,y=184)
     if secs == 0:
         print("fim do tempo")    
-    else:
+    if secs > 0:
         secs = secs - 1
         contador['text'] = secs
         contador.after(1000, tempo)
@@ -58,17 +83,19 @@ def resposta1(m):
     if m == "pular1" or m == "certa":
         global secs
         secs = 60
+        pygame.mixer.music.stop()
+
     if m == "pular1":
         global pular
+        global contador
+        #contador.destroy()
         pular['text'] = f"Pular X{n_pulos-1}"
         if n_pulos == 1:
             pular['state'] = DISABLED
-        destroir()
-        p2()
+        aleatorio()
+        
         n_pulos -= 1
         
-        print(n_pulos)
-        pass
     if m == "certa":
        #cone_certo = Label(janela,text="Certo")
         #icone_certo.place(x=0,y=0)
@@ -79,7 +106,7 @@ def resposta1(m):
         destroir()
         lb_rs.destroy()
         pygame.mixer.music.stop()
-        p2()
+        aleatorio()
         
     if m == "certa2":
         
@@ -87,7 +114,8 @@ def resposta1(m):
         pygame.mixer.music.play()
         janela.after(9000)
         destroir()
-        p3()
+        aleatorio()
+        
     pass    
     pass
 def move_btn():
@@ -106,7 +134,7 @@ def move_btn():
     pass
 
 ########## PERGUNTA 1
-def p1(p1):
+def p1():
     global id
     id = 1
     global n_pulos
@@ -131,8 +159,8 @@ def p1(p1):
     global fundo_respostas
     global rs_500
     global lb_rs
-    tempo()
-    print(id)
+    
+    
     font_perguntas = "Arial 18 bold"
     font_respostas = "Sans-serif 11 bold"
     btn_h = 3
@@ -173,8 +201,6 @@ def p1(p1):
         global res_4
         global frame_p1
         global contador
-        
-        contador.destroy()
         res_1.destroy()
         res_2.destroy()
         res_3.destroy()
@@ -184,12 +210,13 @@ def p1(p1):
     #voltar_img = PhotoImage(file=PastaApp+"/img/voltar.png") 
     voltar = Button(janela,text="Sair",border=0,command=voltar_menu)
     voltar.place(x=970,y=3)
-    n_pulos = 3
+    
     if n_pulos >= 1:
         pular = Button(janela,
         text=f"Pular X{n_pulos} ",
         width=10,
-        command=lambda m="pular1": resposta1(m))
+        command=lambda m="pular1": resposta1(m)
+        )
         pular.place(x=710,y=550)
         
     fundo_respostas = Cores.azul3
@@ -248,12 +275,13 @@ def p1(p1):
     activebackground=Cores.azul,
     activeforeground=Cores.branco,
     command=lambda m="certa": resposta1(m),
+    #command=lambda m="certa": resposta1(m),
     relief=SUNKEN
 )
 ############# PERGUNTA 2
 def p2():
-    global id
-    id = 2
+    
+    global secs
     global fundo_pergunta2
     global font_perguntas
     global frame_p1
@@ -265,7 +293,7 @@ def p2():
     global btn_w
     global btn_h
     global rs_1000
-    
+    secs = 60
     font_perguntas = "Arial 25 bold"
     font_respostas = "Sans-serif 10 bold"
     janela['bg'] = "#FF0000"
@@ -307,7 +335,7 @@ def p2():
     activebackground=Cores.azul,
     
     activeforeground=Cores.branco,
-    command=lambda m="certa2": resposta1(m),
+    command=lambda m="certa": resposta1(m),
     relief=SUNKEN)
     
     res_3 = Button(janela,
@@ -351,7 +379,7 @@ def perguntaN1():
     pygame.mixer.music.stop()
     janela['bg'] = "#FF0000"
     #janela.after(2000,aa())
-    p1("1")
+    p1()
  
     pass
 
@@ -360,22 +388,26 @@ def initf():
     global height 
     global janela
     global PastaApp
+    
     PastaApp = os.path.dirname(__file__)
     width = 1024
     height = 680
     janela = Tk()
     janela.geometry(f"{width}x{height}")
     janela.title("Show do Milhão")
-    
+
 
     
 def fundo_menu():
+    global n_pulos
     global secs
     global texto_iniciar
     global texto_opcoes
     global texto_sair
     global fundo
     global lb_fundo
+    
+    n_pulos = 3
     secs = 60
     fundo = PhotoImage(file=PastaApp+"/img/fundo.png",width=width)
     lb_fundo = Label(janela,image=fundo)
@@ -395,7 +427,8 @@ def fundo_menu():
     activeforeground=Cores.branco,
     highlightcolor=Cores.vermelho,
     width=10,
-    command=perguntaN1
+    command=aleatorio
+    #command=perguntaN1
     
     )
     texto_iniciar.place(x=posx,y=400)
