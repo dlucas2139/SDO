@@ -10,10 +10,7 @@ import time
 
 
 iniciar
-#p3("FundoPergunta2","Teste","bruno","Alala","asdf") 
-Tela_Inicial()
-
-#p3()
-#p2()
+#Perguntas("somp1","imgp1","BASE","ALICERCE","FUNDAMENTO","RUINA")
+Tela_Inicial("")
 
 fechamento()

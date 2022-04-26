@@ -27,7 +27,10 @@ class Inicializar:
         Self.width = 1024
         Self.height = 680
         
+
         Self.janela.geometry(f"{Self.width}x{Self.height}")
+        #Self.janela.attributes('-fullscreen',True)
+        Self.janela.resizable(height=0,width=0)
         Self.janela.title("Show do Milhão")
-    
+        
     
