@@ -32,5 +32,5 @@ class Inicializar:
         #Self.janela.attributes('-fullscreen',True)
         Self.janela.resizable(height=0,width=0)
         Self.janela.title("Show do Milhão")
-        
+        Self.teste = Label(Self.janela,width=100,height=100,bg="#FFFFFF")
     
