@@ -1,4 +1,4 @@
-from genericpath import exists
+
 from tkinter import *
 from tkinter import ttk
 from tkinter.tix import IMAGE
@@ -6,13 +6,16 @@ from random import randint
 from classes import *
 import os
 from typing_extensions import Self
+from perguntas import *
 import pygame
 import time
 result = []
 acertos = 0
+pontos = 0
 Tempo = False
 
 iniciar = Inicializar()
+respostas = ["RUINA","UMA CARAVELA","RÚSSIA","FRUTA","CÉU","ÚTERO","NO PARAISO"]
 id = 0
 i = -10
 j = 0
@@ -71,34 +74,31 @@ def voltar_cor2(event):
     voltar['bg'] = Cores.branco
     voltar['fg'] = Cores.preto
 
-def cartas():
-    print(m)
-    pass
-
 
 def Botoes_De_Tela():
     global voltar
     global pular
     global n_pulos
+    global pontos
+    global Tempo
+    global Pontuacao
     print(f"PULOS: {n_pulos}")
    
-
+    
     Fundo_Direito = Label(iniciar.janela,width=34,height=50,bg=Cores.preto)
     Fundo_Direito.place(x=710,y=150)
-
+        
     voltar = Label(iniciar.janela,text=f"Sair",width=13,bg=Cores.branco)
     voltar.place(x=855,y=550)
     voltar.bind("<Button-1>",Tela_Inicial)
     voltar.bind("<Enter>",voltar_cor1)
     voltar.bind("<Leave>",voltar_cor2)
 
-    cartas = Label(iniciar.janela,text=f"Carta",width=13,bg=Cores.branco)
-    cartas.place(x=855,y=490)
-    cartas.bind("<Button-1>",cartas)
+ 
     
 
     if n_pulos >= 1:
-        pular = Label(iniciar.janela,text=f"PULAR PERGUNTA ",width=14)
+        pular = Label(iniciar.janela,text=f"PULAR PERGUNTA ",width=14,bg=Cores.branco)
         pular.bind("<Button-1>",passar)
         pular.bind("<Enter>",passar_cor1)
         pular.bind("<Leave>",passar_cor2)
@@ -110,6 +110,7 @@ def aleatorio():
     global Tempo
     Tempo = True
     print(Tempo)
+    print(secs)
     
     #iniciar.janela.after(3000)
     
@@ -142,6 +143,11 @@ def aleatorio():
     #if perg_aleatoria == 4: p6()
     print (f"NUMERO DA PERGUNTA: {perg_aleatoria}")
     
+    txt_pontuacao = Label(iniciar.janela,text="PONTUAÇÂO",width=25,height=2)
+    Pontuacao = Label(iniciar.janela,text=f"{pontos}",width=25,height=3,bg="#ae2012",fg=Cores.branco)
+    if Tempo == True:
+        txt_pontuacao.place(x=710,y=150)
+        Pontuacao.place(x=710,y=185)    
         
     pass
 
@@ -151,18 +157,22 @@ def tempo():
     global contador
     global txt_tempo
     
-    txt_tempo = Label(iniciar.janela,text="Tempo",font="arial 15",width=6)
-    contador = Label(iniciar.janela,text="",width=6,height=2,bg="#ae2012",fg=Cores.branco,font="arial 15")
+    txt_tempo = Label(iniciar.janela,text="Tempo",width=8,height=2)
+    contador = Label(iniciar.janela,text="",width=8,height=3,bg="#ae2012",fg=Cores.branco)
     if Tempo == True:
-        contador.place(x=950,y=184)
-        txt_tempo.place(x=950,y=155)
+        txt_tempo.place(x=940,y=150)
+        contador.place(x=940,y=185)
+        
     if secs == 0:
+        secs = 60
         print("fim do tempo")    
     if secs > 0:
         
         secs -= 1
         contador['text'] = secs
         contador.after(1000, tempo)
+    if secs <= 0:
+        secs = 0 
    
     pass
 
@@ -180,56 +190,140 @@ def Btn_cor1(r):
     
 def Btn_cor2(r):
     r['bg'] = Cores.vermelho
+active_cartas = True
+num_cartas = 10
 
-def resposta1(m,r):
+def resposta1(m,r,lb,res_1,res_2,res_3,res_4):
     global acertos
     global secs
-    global res_1
+    global active_cartas
     global n_pulos
-    global icone_certo
+    global pontos
+    global lb_cartas
+    global a
+    global num_cartas
+    al = randint(1,3)
+    a = lb
     respostas = ["RUINA","UMA CARAVELA","RÚSSIA","FRUTA","CÉU","ÚTERO","NO PARAISO"]
-    print(m)
-    
+    respostas_erradas = ["NO MAR","NA TERRA","NO INFERNO"]
 
-    if m in respostas and acertos  < 24:
-        secs = 60
+    global r1
+    '''
+    respostas = {"certa":"RUINA","certa":"UMA CARAVELA","certa":"RÚSSIA","certa":"FRUTA","certa":"CÉU","certa":"ÚTERO","certa":"NO PARAISO",
+    "errada":"NO MAR","errada":"NA TERRA","errada":"NO INFERNO"}'''
+    ######################################################################
+    ######################### CARTAS #####################################
+    ######################################################################
+    if m == "cartas":
+
+        
+        for i in range(len(r)):
+            if r[i] in respostas:
+                resposta_certa = r[i]
+                print(type(resposta_certa))
+                print(f"Resposta:Certa: {resposta_certa}")
+
+            if r[i] not in respostas:
+                resposta_errada = r[i]
+                print(f"Resposta Errada:{resposta_errada}")
+                pass
+                print(f"Aleatorio {al}")
+                if al == 1:
+                    if str(res_2['text']) == str(resposta_errada):
+                        res_2['bg'] = Cores.preto
+                        res_2['fg'] = Cores.preto
+                    if str(res_3['text']) == str(resposta_errada):
+                        res_3['bg'] = Cores.preto
+                        res_3['fg'] = Cores.preto
+                    if str(res_4['text']) == str(resposta_errada):
+                        res_4['bg'] = Cores.preto
+                        res_4['fg'] = Cores.preto
+                    if str(res_4['text']) == str(resposta_errada):
+                        res_4['bg'] = Cores.preto
+                        res_4['fg'] = Cores.preto
+                
+                if al == 2:
+                    if str(res_2['text']) == str(resposta_errada):
+                        res_2['bg'] = Cores.preto
+                        res_2['fg'] = Cores.preto
+                    if str(res_3['text']) == str(resposta_errada):
+                        res_3['bg'] = Cores.preto
+                        res_3['fg'] = Cores.preto
+                    if str(res_4['text']) == str(resposta_errada):
+                        res_4['bg'] = Cores.preto
+                        res_4['fg'] = Cores.preto
+                    if str(res_4['text']) == str(resposta_errada):
+                        res_4['bg'] = Cores.preto
+                        res_4['fg'] = Cores.preto
+
+                if al == 3:
+                    if str(res_2['text']) == str(resposta_errada):
+                        res_2['bg'] = Cores.preto
+                        res_2['fg'] = Cores.preto
+                    if str(res_3['text']) == str(resposta_errada):
+                        res_3['bg'] = Cores.preto
+                        res_3['fg'] = Cores.preto
+                        
+                    if str(res_4['text']) == str(resposta_errada):
+                        res_4['bg'] = Cores.preto
+                        res_4['fg'] = Cores.preto
+                    if str(res_4['text']) == str(resposta_errada):
+                        res_4['bg'] = Cores.preto
+                        res_4['fg'] = Cores.preto
+                
+        num_cartas -= 1
+        if active_cartas == True and num_cartas <= 0:
+            #lb_cartas.destroy()
+            lb_cartas.configure(text="Sem cartas")
+        else:
+            lb_cartas.configure(text=f"Cartas: {num_cartas}")
+            pass
+    ############ FIM CARTAS    
+        
+
+           
+           
+            
+            
+            
+    
+    if m in respostas:
+        
+
+        print(m)
         acertos += 1
+        tempo_pergunta = secs
+        pontos = tempo_pergunta * 10 + pontos
+        secs = 60
         print (f"Numero de Acertos: {acertos}")
         pygame.mixer.music.load(iniciar.PastaApp+"/sons/certaresposta.mp3")
         pygame.mixer.music.play()
         iniciar.janela.after(9000)
         destroir()
-    
         pygame.mixer.music.stop()
         aleatorio()
     else:
-        #print("Resposta Errada")
         pass
 
 
   
         
     if m == "certa":
-       #cone_certo = Label(iniciar.janela,text="Certo")
+        #cone_certo = Label(iniciar.janela,text="Certo")
         #icone_certo.place(x=0,y=0)
-        
         pygame.mixer.music.load(iniciar.PastaApp+"/sons/certaresposta.mp3")
         pygame.mixer.music.play()
         iniciar.janela.after(9000)
         destroir()
-        
         pygame.mixer.music.stop()
         aleatorio()
-        
     if m == "certa2":
-        
         pygame.mixer.music.load(iniciar.PastaApp+"/sons/certaresposta.mp3")
         pygame.mixer.music.play()
         iniciar.janela.after(9000)
         destroir()
         aleatorio()
-        
-    
+    return m
 def move_btn():
     global i
     global num_1
@@ -254,8 +348,9 @@ def move_btn():
         iniciar.janela.after(100,lambda:move_btn())
     pass
 
-
-############# PERGUNTA 3##########################################
+######################################################################
+######################### PERGUNTAS ##################################
+######################################################################
 def Perguntas(som,img,r1,r2,r3,r4):
     
     global secs
@@ -352,11 +447,26 @@ def Perguntas(som,img,r1,r2,r3,r4):
     #command=lambda m=f"{r4}": resposta1(m),
     relief=SUNKEN
      )
+    global lb_cartas
+    global active_cartas
+    global num_cartas
+    res_1.bind("<Button-1>",lambda m=f"{r1}": resposta1(r1,res_1,"","","","",""))
+    res_2.bind("<Button-1>",lambda m=f"{r2}": resposta1(r2,res_2,"","","","",""))
+    res_3.bind("<Button-1>",lambda m=f"{r3}": resposta1(r3,res_3,"","","","",""))
+    res_4.bind("<Button-1>",lambda m=f"{r4}": resposta1(r4,res_4,"","","","",""))
+    jj = [r1,r2,r3,r4]
+    hh = [res_1,res_2,res_3,res_4]
+    lb_cartas = Label(iniciar.janela,text=f"Cartas {num_cartas}",width=13,bg=Cores.branco)
+    print(active_cartas)
+    if active_cartas == True:
+        lb_cartas.place(x=855,y=490)
+    if num_cartas > 0:
+        lb_cartas.bind("<Button-1>",lambda m="Cartas":resposta1("cartas",jj,img,res_1,res_2,res_3,res_4))
+    else: lb_cartas.configure(text="Sem Cartas")
     
-    res_1.bind("<Button-1>",lambda m=f"{r1}": resposta1(r1,res_1))
-    res_2.bind("<Button-1>",lambda m=f"{r2}": resposta1(r2,res_2))
-    res_3.bind("<Button-1>",lambda m=f"{r3}": resposta1(r3,res_3))
-    res_4.bind("<Button-1>",lambda m=f"{r4}": resposta1(r4,res_4))
+    
+    
+
     ################MUDANDO BG DAS LABEL
     res_1.bind("<Enter>",lambda m=f"{r1}": Btn_cor1(res_1))
     res_2.bind("<Enter>",lambda m=f"{r2}": Btn_cor1(res_2))
@@ -367,6 +477,16 @@ def Perguntas(som,img,r1,r2,r3,r4):
     res_2.bind("<Leave>",lambda m=f"{r2}": Btn_cor2(res_2))
     res_3.bind("<Leave>",lambda m=f"{r3}": Btn_cor2(res_3))
     res_4.bind("<Leave>",lambda m=f"{r4}": Btn_cor2(res_4))
+   
+    
+
+def cartas():
+    teste=res_1
+    global respostas
+    print(teste)
+    
+      
+    pass
 
 
 def Tela_Inicial(event):
@@ -378,7 +498,12 @@ def Tela_Inicial(event):
     global fundo
     global lb_fundo
     global result
-    
+    global pontos
+    global num_cartas
+    global active_cartas
+    num_cartas = 10
+    active_cartas = True
+    pontos = 0
     secs = 60
     result = []
     n_pulos = 100

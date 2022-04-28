@@ -10,7 +10,7 @@ import time
 
 
 iniciar
-#Perguntas("somp1","imgp1","BASE","ALICERCE","FUNDAMENTO","RUINA")
-Tela_Inicial("")
+Perguntas("somp1","imgp1","BASE","ALICERCE","FUNDAMENTO","RUINA")
+#Tela_Inicial("")
 
 fechamento()
