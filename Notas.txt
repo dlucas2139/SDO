@@ -1,0 +1,1 @@
+Tamanho dos icones nas Labels: 80x40

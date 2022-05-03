@@ -26,11 +26,14 @@ class Inicializar:
         Self.PastaApp = os.path.dirname(__file__)
         Self.width = 1024
         Self.height = 680
-        
-
+        #Self.width = Self.janela.winfo_screenwidth()               
+        #Self.height= Self.janela.winfo_screenheight()               
+        Self.janela.geometry("%dx%d" % (Self.width, Self.height))
+        Self.janela['bg'] = "#FFFF00"
         Self.janela.geometry(f"{Self.width}x{Self.height}")
         #Self.janela.attributes('-fullscreen',True)
-        Self.janela.resizable(height=0,width=0)
-        Self.janela.title("Show do Milhão")
-        Self.teste = Label(Self.janela,width=100,height=100,bg="#FFFFFF")
+        #Self.janela.attributes('-zoomed',True)
+        #Self.janela.resizable(height=0,width=0)
+        Self.janela.title("Bruno Lucas / Project Game")
+        
     

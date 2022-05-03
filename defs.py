@@ -6,7 +6,7 @@ from random import randint
 from classes import *
 import os
 from typing_extensions import Self
-from perguntas import *
+
 import pygame
 import time
 result = []
@@ -15,6 +15,42 @@ pontos = 0
 Tempo = False
 
 iniciar = Inicializar()
+def dfcreditos():
+    global Tempo
+    global num_cartas
+    global active_cartas
+    global pontos
+    global secs
+    global n_pulos
+    global creditos_img
+    global lb_creditos
+    global creditos
+    global voltar
+    texto_iniciar.destroy()
+    texto_opcoes.destroy() 
+    texto_sair.destroy() 
+    lb_fundo.destroy() 
+    creditos.destroy()
+
+    num_cartas = 10
+    active_cartas = True
+    pontos = 0
+    secs = 60
+    result = []
+    n_pulos = 100
+    
+    Tempo = False
+    creditos_img = PhotoImage(file="/img/creditos.png",width=1024,height=680)
+    lb_creditos = Label(iniciar.janela,image=creditos_img)
+    lb_creditos.pack()
+    voltar = Label(iniciar.janela,text=f"Sair",width=13,bg=Cores.branco)
+    voltar.place(x=855,y=550)
+    voltar.bind("<Button-1>",Tela_Inicial)
+    voltar.bind("<Enter>",voltar_cor1)
+    voltar.bind("<Leave>",voltar_cor2)
+
+    pass
+
 respostas = ["RUINA","UMA CARAVELA","RÚSSIA","FRUTA","CÉU","ÚTERO","NO PARAISO"]
 id = 0
 i = -10
@@ -74,7 +110,10 @@ def voltar_cor2(event):
     voltar['bg'] = Cores.branco
     voltar['fg'] = Cores.preto
 
-
+def mutar():
+    print(f"Audio: {var.get()}")
+    if var.get() == 1:
+        pygame.mixer.music.stop()
 def Botoes_De_Tela():
     global voltar
     global pular
@@ -82,14 +121,23 @@ def Botoes_De_Tela():
     global pontos
     global Tempo
     global Pontuacao
+    global check_som
+    global var
+    global Fundo_direito_img
+    global img_pulo
+    global img_voltar
     print(f"PULOS: {n_pulos}")
    
-    
-    Fundo_Direito = Label(iniciar.janela,width=34,height=50,bg=Cores.preto)
+    var = IntVar()
+    img_voltar = PhotoImage(file="/img/voltarso0.png")
+    img_pulo = PhotoImage(file="/img/pular.png")
+    Fundo_direito_img = PhotoImage(file="/img/fundodireita.png",width=500,height=500)
+    Fundo_Direito = Label(iniciar.janela,width=320,height=580,image=Fundo_direito_img,border=0)
     Fundo_Direito.place(x=710,y=150)
-        
-    voltar = Label(iniciar.janela,text=f"Sair",width=13,bg=Cores.branco)
-    voltar.place(x=855,y=550)
+    check_som = Checkbutton(iniciar.janela,text="som",variable=var,command=lambda m=var: mutar())
+    #check_som.pack()
+    voltar = Label(iniciar.janela,text=f"Sair",width=80,height=40,bg=Cores.branco,image=img_voltar)
+    voltar.place(x=720,y=635)
     voltar.bind("<Button-1>",Tela_Inicial)
     voltar.bind("<Enter>",voltar_cor1)
     voltar.bind("<Leave>",voltar_cor2)
@@ -98,26 +146,33 @@ def Botoes_De_Tela():
     
 
     if n_pulos >= 1:
-        pular = Label(iniciar.janela,text=f"PULAR PERGUNTA ",width=14,bg=Cores.branco)
+        pular = Label(iniciar.janela,image=img_pulo,width=150,height=119,bg=Cores.branco,border=0)
+        txt_pular = Label(iniciar.janela,text=f"Pular {n_pulos}",width=17,font="SERIF")
         pular.bind("<Button-1>",passar)
         pular.bind("<Enter>",passar_cor1)
         pular.bind("<Leave>",passar_cor2)
-        pular.place(x=720,y=550)
+        txt_pular.bind("<Button-1>",passar)
+        txt_pular.bind("<Enter>",passar_cor1)
+        txt_pular.bind("<Leave>",passar_cor2)
+        pular.place(x=715,y=280)
+        txt_pular.place(x=710,y=419)
 
-
+lb_creditos = Label()
 def aleatorio():
     titulo = False
+    global lb_creditos
     global Tempo
     Tempo = True
     print(Tempo)
     print(secs)
     
     #iniciar.janela.after(3000)
-    
+    lb_creditos.destroy()
     texto_iniciar.destroy()
     texto_opcoes.destroy() 
     texto_sair.destroy() 
     lb_fundo.destroy() 
+    
     pygame.mixer.music.stop()
     iniciar.janela['bg'] = "#FF0000"
     #iniciar.janela.after(2000,aa())
@@ -143,11 +198,11 @@ def aleatorio():
     #if perg_aleatoria == 4: p6()
     print (f"NUMERO DA PERGUNTA: {perg_aleatoria}")
     
-    txt_pontuacao = Label(iniciar.janela,text="PONTUAÇÂO",width=25,height=2)
-    Pontuacao = Label(iniciar.janela,text=f"{pontos}",width=25,height=3,bg="#ae2012",fg=Cores.branco)
+    txt_pontuacao = Label(iniciar.janela,text="PONTUAÇÂO",width=25,height=2,font="SERIF")
+    Pontuacao = Label(iniciar.janela,text=f"{pontos}",width=26,height=3,bg="#ae2012",fg=Cores.branco,font="SERIF")
     if Tempo == True:
         txt_pontuacao.place(x=710,y=150)
-        Pontuacao.place(x=710,y=185)    
+        Pontuacao.place(x=710,y=190)    
         
     pass
 
@@ -157,11 +212,11 @@ def tempo():
     global contador
     global txt_tempo
     
-    txt_tempo = Label(iniciar.janela,text="Tempo",width=8,height=2)
-    contador = Label(iniciar.janela,text="",width=8,height=3,bg="#ae2012",fg=Cores.branco)
+    txt_tempo = Label(iniciar.janela,text="Tempo",width=8,height=2,font="SERIF")
+    contador = Label(iniciar.janela,text="",width=9,height=3,bg="#ae2012",fg=Cores.branco,font="SERIF")
     if Tempo == True:
         txt_tempo.place(x=940,y=150)
-        contador.place(x=940,y=185)
+        contador.place(x=940,y=190)
         
     if secs == 0:
         secs = 60
@@ -193,7 +248,7 @@ def Btn_cor2(r):
 active_cartas = True
 num_cartas = 10
 
-def resposta1(m,r,lb,res_1,res_2,res_3,res_4):
+def resposta1(m,r,lb,*args):
     global acertos
     global secs
     global active_cartas
@@ -296,7 +351,7 @@ def resposta1(m,r,lb,res_1,res_2,res_3,res_4):
         pontos = tempo_pergunta * 10 + pontos
         secs = 60
         print (f"Numero de Acertos: {acertos}")
-        pygame.mixer.music.load(iniciar.PastaApp+"/sons/certaresposta.mp3")
+        pygame.mixer.music.load("/sons/certaresposta.mp3")
         pygame.mixer.music.play()
         iniciar.janela.after(9000)
         destroir()
@@ -311,14 +366,14 @@ def resposta1(m,r,lb,res_1,res_2,res_3,res_4):
     if m == "certa":
         #cone_certo = Label(iniciar.janela,text="Certo")
         #icone_certo.place(x=0,y=0)
-        pygame.mixer.music.load(iniciar.PastaApp+"/sons/certaresposta.mp3")
+        pygame.mixer.music.load("/sons/certaresposta.mp3")
         pygame.mixer.music.play()
         iniciar.janela.after(9000)
         destroir()
         pygame.mixer.music.stop()
         aleatorio()
     if m == "certa2":
-        pygame.mixer.music.load(iniciar.PastaApp+"/sons/certaresposta.mp3")
+        pygame.mixer.music.load("/sons/certaresposta.mp3")
         pygame.mixer.music.play()
         iniciar.janela.after(9000)
         destroir()
@@ -352,7 +407,8 @@ def move_btn():
 ######################### PERGUNTAS ##################################
 ######################################################################
 def Perguntas(som,img,r1,r2,r3,r4):
-    
+    global lb_creditos
+    global creditos_img
     global secs
     global fundo_pergunta2
     global font_perguntas
@@ -367,7 +423,9 @@ def Perguntas(som,img,r1,r2,r3,r4):
     global rs_1000
     global fundo_jogo
     global frame_right
-    fundo_jogo = PhotoImage(file=iniciar.PastaApp+"/img/a.png")
+
+    
+    fundo_jogo = PhotoImage(file="/img/a.png")
     frame_right=Label(iniciar.janela,width=1024,height=680, image=fundo_jogo)
     frame_right.place(x=0,y=0)
 
@@ -376,19 +434,19 @@ def Perguntas(som,img,r1,r2,r3,r4):
     Botoes_De_Tela()
     
     font_perguntas = "Arial 25 bold"
-    font_respostas = "Sans-serif 10 bold"
+    font_respostas = "SERIF 10 bold"
     iniciar.janela['bg'] = "#FF0000"
     pygame.mixer.init()
-    pygame.mixer.music.load(iniciar.PastaApp+f"/sons/{som}.mp3")
+    pygame.mixer.music.load(f"/sons/{som}.mp3")
     pygame.mixer.music.play()
 
-    #pygame.mixer.music.load(iniciar.PastaApp+f"/sons/Somsuspense.mp3")
+    #pygame.mixer.music.load(f"/sons/Somsuspense.mp3")
     #pygame.mixer.music.play()
     
     frame_p1=Frame(iniciar.janela,width=660,height=150)
     frame_p1.place(x=50,y=148)
     
-    fundo_pergunta2 = PhotoImage(file=iniciar.PastaApp+f"/img/imgs_perguntas/{img}.png")
+    fundo_pergunta2 = PhotoImage(file=f"/img/imgs_perguntas/{img}.png")
     lb_p1 = Label(frame_p1,text=f"QUAL DESSAS PALAVRAS NÂO TEM RELAÇÂO COM SUTENTAÇÂO",image=fundo_pergunta2,border=0)
     lb_p1.place(x=0,y=0)
     iniciar.janela.after(100,lambda:move_btn())
@@ -450,18 +508,25 @@ def Perguntas(som,img,r1,r2,r3,r4):
     global lb_cartas
     global active_cartas
     global num_cartas
-    res_1.bind("<Button-1>",lambda m=f"{r1}": resposta1(r1,res_1,"","","","",""))
-    res_2.bind("<Button-1>",lambda m=f"{r2}": resposta1(r2,res_2,"","","","",""))
-    res_3.bind("<Button-1>",lambda m=f"{r3}": resposta1(r3,res_3,"","","","",""))
-    res_4.bind("<Button-1>",lambda m=f"{r4}": resposta1(r4,res_4,"","","","",""))
+    global cartas_img
+    res_1.bind("<Button-1>",lambda m=f"{r1}": resposta1(r1,res_1,""))
+    res_2.bind("<Button-1>",lambda m=f"{r2}": resposta1(r2,res_2,""))
+    res_3.bind("<Button-1>",lambda m=f"{r3}": resposta1(r3,res_3,""))
+    res_4.bind("<Button-1>",lambda m=f"{r4}": resposta1(r4,res_4,""))
     jj = [r1,r2,r3,r4]
     hh = [res_1,res_2,res_3,res_4]
-    lb_cartas = Label(iniciar.janela,text=f"Cartas {num_cartas}",width=13,bg=Cores.branco)
+    cartas_img = PhotoImage(file="/img/cartas.png")
+    cartas_img2 = Label(iniciar.janela,image=cartas_img,width=150,height=119,border=0)
+    
+    lb_cartas = Label(iniciar.janela,text=f"Cartas {num_cartas}",width=17,bg=Cores.branco,font="SERIF")
     print(active_cartas)
     if active_cartas == True:
-        lb_cartas.place(x=855,y=490)
+        lb_cartas.place(x=870,y=419)
+        cartas_img2.place(x=870,y=280)
     if num_cartas > 0:
         lb_cartas.bind("<Button-1>",lambda m="Cartas":resposta1("cartas",jj,img,res_1,res_2,res_3,res_4))
+        cartas_img2.bind("<Button-1>",lambda m="Cartas":resposta1("cartas",jj,img,res_1,res_2,res_3,res_4))
+
     else: lb_cartas.configure(text="Sem Cartas")
     
     
@@ -501,6 +566,7 @@ def Tela_Inicial(event):
     global pontos
     global num_cartas
     global active_cartas
+    global creditos
     num_cartas = 10
     active_cartas = True
     pontos = 0
@@ -509,8 +575,9 @@ def Tela_Inicial(event):
     n_pulos = 100
     global Tempo
     Tempo = False
-    fundo = PhotoImage(file=iniciar.PastaApp+"/img/fundo.png",width=iniciar.width)
-    lb_fundo = Label(iniciar.janela,image=fundo)
+    fundo = PhotoImage(file="/img/fundo.png",width=iniciar.width,height=iniciar.height)
+    
+    lb_fundo = Label(iniciar.janela,image=fundo,width=iniciar.width,height=iniciar.height)
     lb_fundo.place(x=0,y=0)
     tamanho_fonte = 30
     posx = 400
@@ -548,6 +615,21 @@ def Tela_Inicial(event):
     )
     texto_opcoes.place(x=posx,y=460)
 
+    creditos = Button(iniciar.janela,
+    highlightthickness = 0, 
+    bd = 0,
+    text="Creditos",
+    font=f"Arial {tamanho_fonte} bold",
+    fg=Cores.branco,
+    bg=Cores.fundo,
+    activebackground=Cores.verde,
+    activeforeground=Cores.branco,
+    highlightcolor=Cores.vermelho,
+    width=10,
+    command=dfcreditos
+    )
+    creditos.place(x=posx,y=520)
+
     texto_sair = Button(iniciar.janela,
     highlightthickness = 0, 
     bd = 0,
@@ -561,7 +643,8 @@ def Tela_Inicial(event):
     width=10,
     command=iniciar.janela.destroy
     )
-    texto_sair.place(x=posx,y=520)
+    texto_sair.place(x=posx,y=580)
+
     
 tempo()
 #iniciar.teste.pack()
@@ -569,7 +652,7 @@ tempo()
 def musica_titulo():
     
     pygame.mixer.init()
-    pygame.mixer.music.load(iniciar.PastaApp+"/sons/intro.mp3")
+    pygame.mixer.music.load("/sons/intro.mp3")
 
     pygame.mixer.music.play()
     pass
