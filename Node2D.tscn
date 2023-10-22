@@ -1,0 +1,82 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://perguntas.gd" type="Script" id=1]
+[ext_resource path="res://img/FundoPerguntasemtexto.png" type="Texture" id=2]
+[ext_resource path="res://img/a.png" type="Texture" id=3]
+[ext_resource path="res://sons/intro.mp3" type="AudioStream" id=4]
+[ext_resource path="res://sons/certaresposta.mp3" type="AudioStream" id=5]
+[ext_resource path="res://img/cartas.png" type="Texture" id=6]
+[ext_resource path="res://sons/perguntas_separadas/somp1.mp3" type="AudioStream" id=7]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="fundo" type="Sprite" parent="."]
+position = Vector2( 526.5, 316 )
+scale = Vector2( 1.01855, 0.913235 )
+texture = ExtResource( 3 )
+normal_map = ExtResource( 3 )
+
+[node name="Cartas" type="Sprite" parent="fundo"]
+position = Vector2( 304.844, -65.7005 )
+texture = ExtResource( 6 )
+
+[node name="FD_Pergunta" type="Sprite" parent="."]
+position = Vector2( 380, 213 )
+texture = ExtResource( 2 )
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+margin_left = 194.0
+margin_top = 167.0
+margin_right = 577.0
+margin_bottom = 238.0
+
+[node name="RES_1" type="Button" parent="."]
+margin_left = 67.0
+margin_top = 288.0
+margin_right = 562.0
+margin_bottom = 360.0
+
+[node name="acertou_errou" type="Button" parent="."]
+margin_left = 691.0
+margin_top = 503.0
+margin_right = 920.0
+margin_bottom = 575.0
+
+[node name="RES_2" type="Button" parent="."]
+margin_left = 67.0
+margin_top = 372.0
+margin_right = 562.0
+margin_bottom = 444.0
+
+[node name="RES_3" type="Button" parent="."]
+margin_left = 67.0
+margin_top = 458.0
+margin_right = 562.0
+margin_bottom = 530.0
+
+[node name="RES_4" type="Button" parent="."]
+margin_left = 66.0
+margin_top = 543.0
+margin_right = 561.0
+margin_bottom = 615.0
+
+[node name="TouchScreenButton" type="TouchScreenButton" parent="."]
+
+[node name="cartas" type="Button" parent="."]
+margin_left = 760.0
+margin_top = 336.0
+margin_right = 902.0
+margin_bottom = 384.0
+text = "Cartas"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 4 )
+
+[node name="certaresposta" type="AudioStreamPlayer2D" parent="AudioStreamPlayer2D"]
+stream = ExtResource( 5 )
+
+[node name="somp1" type="AudioStreamPlayer2D" parent="AudioStreamPlayer2D"]
+stream = ExtResource( 7 )
+
+[connection signal="pressed" from="cartas" to="." method="_on_cartas_pressed"]
